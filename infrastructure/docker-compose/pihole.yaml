@@ -1,0 +1,24 @@
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "80:80/tcp"
+    environment:
+      TZ: 'America/Chicago'
+      WEBPASSWORD: 'changeme'   # Change this to a strong password
+      FTLCONF_LOCAL_IPV4: '192.168.254.47'
+      PIHOLE_DNS_: '8.8.8.8;8.8.4.4'
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    volumes:
+      - pihole_data:/etc/pihole
+      - dnsmasq_data:/etc/dnsmasq.d
+    restart: unless-stopped
+
+volumes:
+  pihole_data:
+  dnsmasq_data:

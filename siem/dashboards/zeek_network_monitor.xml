@@ -1,0 +1,83 @@
+<dashboard version="1.1" theme="dark">
+  <label>Zeek Network Monitor</label>
+  <row>
+    <panel>
+      <title>Top 10 Source IPs</title>
+      <table>
+        <search>
+          <query>sourcetype=zeek_json source=*conn* | top limit=10 id.orig_h</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Top 10 DNS Queries</title>
+      <table>
+        <search>
+          <query>sourcetype=zeek_json source=*dns* | top limit=10 query</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Connection Protocols Over Time</title>
+      <chart>
+        <search>
+          <query>sourcetype=zeek_json source=*conn* | timechart count by proto</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Weird Activity</title>
+      <table>
+        <search>
+          <query>sourcetype=zeek_json source=*weird* | table ts name peer msg</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>404 Errors</title>
+      <table>
+        <search>
+          <query>sourcetype=nginx_access status=404 | table _time method uri status</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>200 vs 404</title>
+      <chart>
+        <search>
+          <query>sourcetype=nginx_access | timechart count by status</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+</dashboard>
