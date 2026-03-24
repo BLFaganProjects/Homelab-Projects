@@ -14,11 +14,11 @@ Remote Device (phone/laptop)
         │
 Frontier Router (port forward 51820/UDP)
         │
-HP Homelab Server (192.168.254.47)
+HP Homelab Server (192.xxx.xxx.47)
         │
 WireGuard Container
         │
-Pi-hole DNS (192.168.254.47)
+Pi-hole DNS (192.xxx.xxx.47)
 ```
 
 ## DuckDNS Setup
@@ -42,14 +42,14 @@ Key environment variables:
 
 ## Port Forwarding
 
-Required on router: Forward external UDP port 51820 to internal `192.168.254.47:51820`.
+Required on router: Forward external UDP port 51820 to internal `192.xxx.xxx.47:51820`.
 
 On Frontier NVG468MQ:
 - **Firewall → Port Forwarding**
 - Protocol: UDP
 - Global Port Range: 51820 - 51820
 - Local Base Port: 51820
-- Device: 192.168.254.47
+- Device: 192.xxx.xxx.47
 
 ## Client Configuration
 
