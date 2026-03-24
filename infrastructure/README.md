@@ -8,7 +8,7 @@ The homelab server is a repurposed HP laptop running Ubuntu Server 24.04 with a 
 
 - **Device:** HP Laptop (repurposed)
 - **OS:** Ubuntu Server 24.04 LTS
-- **IP:** 192.168.254.47 (static, DHCP reservation bound to MAC)
+- **IP:** 192.168.xxx.xx (static, DHCP reservation bound to MAC)
 - **Access:** SSH only, lid closed headless operation
 
 ## Static IP Configuration
@@ -17,8 +17,8 @@ Configured via netplan. See [netplan/50-cloud-init.yaml](netplan/50-cloud-init.y
 
 Key settings:
 - Interface: `enp2s0`
-- Static IP: `192.168.254.47/24`
-- Gateway: `192.168.254.254`
+- Static IP: `192.168.xxx.xx/24`
+- Gateway: `192.168.xxx.xxx`
 - DNS: `8.8.8.8`, `8.8.4.4`
 
 Lid switch disabled for headless operation:
@@ -57,7 +57,7 @@ sudo docker run -d \
   portainer/portainer-ce:latest
 ```
 
-Access at: `https://192.168.254.47:9443`
+Access at: `https://192.168.xxx.xx:9443`
 
 ## Running Containers
 
@@ -78,6 +78,6 @@ See the [docker-compose/](docker-compose/) directory for all stack definitions:
 
 ## Network-Wide DNS Filtering
 
-Pi-hole deployed as network DNS server. Router configured with DHCP Option 6 to push `192.168.254.47` as the DNS server to all network clients automatically.
+Pi-hole deployed as network DNS server. Router configured with DHCP Option 6 to push `192.168.xxx.xx` as the DNS server to all network clients automatically.
 
-Router setting: **Frontier NVG468MQ → Advanced → LAN & DHCP → Custom Option: 6 = 192.168.254.47**
+Router setting: **Frontier NVG468MQ → Advanced → LAN & DHCP → Custom Option: 6 = 192.168.xxx.xx**
