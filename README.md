@@ -15,20 +15,20 @@ A multi-node home lab environment built for hands-on cybersecurity practice, SOC
 ```
 Internet
     │
-Frontier NVG468MQ Router (192.168.254.254)
+Frontier NVG468MQ Router (192.xxx.xxx.xx)
     │
-    ├── NUC8 / Kali Linux Purple (192.168.254.39) - WiFi
+    ├── NUC8 / Kali Linux Purple (192.xxx.xxx.39) - WiFi
     │       ├── Zeek 8.1.1 (network monitor)
     │       ├── Suricata IDS
     │       └── Splunk Enterprise (SIEM)
     │
-    ├── HP Homelab Server (192.168.254.47) - Ethernet / Static IP
+    ├── HP Homelab Server (192.xxx.xxx.47) - Ethernet / Static IP
     │       ├── Docker + Portainer
     │       ├── Pi-hole (DNS sinkhole)
     │       ├── WireGuard VPN server
     │       └── DuckDNS updater
     │
-    └── antiX Netbook (192.168.254.27) - WiFi
+    └── antiX Netbook (192.xxx.xxx.27) - WiFi
             └── WireGuard client
 ```
 
@@ -56,7 +56,7 @@ See [infrastructure/README.md](infrastructure/README.md)
 See [siem/README.md](siem/README.md)
 
 ### 🔒 VPN
-- **WireGuard** server accessible via `barkingturtlelabs.duckdns.org:51820`
+- **WireGuard** server accessible via `barkingturtlelabs.duckdns.org:xxxxx`
 - Peer configs for Android phone and Linux laptop
 - Pi-hole DNS routed through VPN tunnel for ad blocking on all devices remotely
 
