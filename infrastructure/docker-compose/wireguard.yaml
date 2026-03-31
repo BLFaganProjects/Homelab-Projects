@@ -9,10 +9,10 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=America/Chicago
-      - SERVERURL=barkingturtlelabs.duckdns.org  # Replace with your DuckDNS domain
+      - SERVERURL=your-domain.duckdns.org  # Replace with your DuckDNS domain
       - SERVERPORT=51820
-      - PEERS=phone,laptop                        # Add peer names here
-      - PEERDNS=192.168.254.47                    # Pi-hole for DNS over VPN
+      - PEERS=phone,laptop                  # Add peer names here
+      - PEERDNS=192.168.xxx.xx              # Pi-hole IP for DNS over VPN
       - INTERNAL_SUBNET=10.13.13.0
     volumes:
       - wireguard_config:/config

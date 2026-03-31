@@ -9,7 +9,7 @@ services:
     environment:
       TZ: 'America/Chicago'
       WEBPASSWORD: 'changeme'   # Change this to a strong password
-      FTLCONF_LOCAL_IPV4: '192.168.254.47'
+      FTLCONF_LOCAL_IPV4: '192.168.xxx.xx'
       PIHOLE_DNS_: '8.8.8.8;8.8.4.4'
     dns:
       - 8.8.8.8
@@ -17,6 +17,7 @@ services:
     volumes:
       - pihole_data:/etc/pihole
       - dnsmasq_data:/etc/dnsmasq.d
+      - /var/log/pihole:/var/log/pihole
     restart: unless-stopped
 
 volumes:

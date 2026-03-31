@@ -4,8 +4,8 @@ services:
     container_name: duckdns
     environment:
       - TZ=America/Chicago
-      - SUBDOMAINS=barkingturtlelabs          # Replace with your subdomain
-      - TOKEN=your-duckdns-token-here         # Replace with your DuckDNS token
+      - SUBDOMAINS=your-subdomain        # Replace with your subdomain
+      - TOKEN=your-duckdns-token-here    # Replace with your DuckDNS token
       - UPDATE_IP=ipv4
       - LOG_FILE=false
     restart: unless-stopped

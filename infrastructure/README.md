@@ -17,9 +17,8 @@ Configured via netplan. See [netplan/50-cloud-init.yaml](netplan/50-cloud-init.y
 
 Key settings:
 - Interface: `enp2s0`
-- Static IP: `192.168.xxx.xx/24`
-- Gateway: `192.168.xxx.xxx`
-- DNS: `8.8.8.8`, `8.8.4.4`
+- Gateway: 192.168.xxx.xxx
+- DNS: 8.8.8.8, 8.8.4.4
 
 Lid switch disabled for headless operation:
 ```bash
@@ -43,7 +42,7 @@ sudo apt update && sudo apt install -y docker-ce docker-ce-cli containerd.io doc
 
 ## Portainer
 
-Web-based Docker management UI running on port 9443.
+Web-based Docker management UI running on port 9443 (HTTPS).
 
 ```bash
 sudo docker volume create portainer_data
@@ -57,8 +56,6 @@ sudo docker run -d \
   portainer/portainer-ce:latest
 ```
 
-Access at: `https://192.168.xxx.xx:9443`
-
 ## Running Containers
 
 | Container | Purpose | Port |
@@ -67,17 +64,25 @@ Access at: `https://192.168.xxx.xx:9443`
 | Pi-hole | DNS filtering & ad blocking | 80, 53 |
 | WireGuard | VPN server | 51820/UDP |
 | DuckDNS | Dynamic DNS updater | — |
+| Nextcloud | Self-hosted cloud storage | 8080 |
+| Dashy | Unified dashboard | 4000 |
 
 ## Docker Compose Files
 
-See the [docker-compose/](docker-compose/) directory for all stack definitions:
-
-- `pihole.yaml` — Network-wide DNS sinkhole
-- `wireguard.yaml` — Self-hosted VPN server
-- `duckdns.yaml` — Public IP auto-updater
+See the [docker-compose/](docker-compose/) directory for all stack definitions.
 
 ## Network-Wide DNS Filtering
 
-Pi-hole deployed as network DNS server. Router configured with DHCP Option 6 to push `192.168.xxx.xx` as the DNS server to all network clients automatically.
+Pi-hole deployed as network DNS server. Router configured with DHCP Option 6 to push Pi-hole IP as the DNS server to all network clients automatically.
 
-Router setting: **Frontier NVG468MQ → Advanced → LAN & DHCP → Custom Option: 6 = 192.168.xxx.xx**
+## Nextcloud
+
+Self-hosted cloud storage with MariaDB backend. Features:
+- Photo auto-upload from Android via Nextcloud app
+- 2FA enabled via TOTP (Aegis authenticator)
+- File scanning via `occ files:scan --all`
+- Maintenance window set to 2am
+
+## Dashy
+
+Unified dashboard with SHA256 hashed authentication. Tiles include Splunk, Pi-hole, Portainer, Nextcloud, and GitHub portfolio.

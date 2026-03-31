@@ -4,10 +4,10 @@ network:
     enp2s0:
       dhcp4: no
       addresses:
-        - 192.168.254.47/24
+        - 192.168.xxx.xx/24
       routes:
         - to: default
-          via: 192.168.254.254
+          via: 192.168.xxx.xxx
       nameservers:
         addresses:
           - 8.8.8.8

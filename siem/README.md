@@ -2,7 +2,7 @@
 
 ## Overview
 
-Splunk Enterprise runs on the NUC8 (Kali Linux Purple) and serves as the central SIEM, ingesting logs from multiple sources across the lab network.
+Splunk Enterprise runs on the NUC8 (Kali Linux Purple) and serves as the central SIEM, ingesting logs from multiple sources across the lab network. Sleep is disabled on the NUC to keep Splunk running 24/7.
 
 ## Installation
 
@@ -14,11 +14,11 @@ sudo /opt/splunk/bin/splunk stop
 sudo /opt/splunk/bin/splunk status
 ```
 
-Access at: `http://192.168.254.39:8000`
+Access at: `https://192.168.xxx.xx:8000`
 
 ## Log Sources
 
-All sources configured in `/opt/splunk/etc/apps/search/local/inputs.conf`:
+### NUC (Direct Monitoring)
 
 | Source | Sourcetype | Description |
 |--------|-----------|-------------|
@@ -28,65 +28,28 @@ All sources configured in `/opt/splunk/etc/apps/search/local/inputs.conf`:
 | `/var/log/auth.log` | `linux_secure` | SSH and authentication events |
 | `/var/log/syslog` | `syslog` | System log |
 | `/var/log/nginx` | `nginx_access` | Nginx web server logs |
-| `/var/log/apt` | `linux_apt` | APT package manager logs |
-| `/var/log/dpkg.log` | `linux_dpkg` | DPKG package logs |
-| `/var/log/clamav` | `clamav` | ClamAV antivirus logs |
-| `/var/log/openvpn` | `openvpn` | OpenVPN logs |
-| `/var/log/boot.log` | `linux_boot` | Boot logs |
 
-## inputs.conf
+### Homelab Server (Via Universal Forwarder)
 
-```ini
-[monitor:///opt/zeek/spool/zeek]
-disabled = false
-sourcetype = zeek_json
+| Source | Sourcetype | Description |
+|--------|-----------|-------------|
+| `/var/log/syslog` | `syslog` | Server system log |
+| `/var/log/auth.log` | `linux_secure` | Server auth events |
+| `/var/log/pihole/pihole.log` | `pihole` | Pi-hole DNS queries |
+| `/var/log/dpkg.log` | `linux_dpkg` | Package manager logs |
 
-[monitor:///var/log/suricata/eve.json]
-disabled = false
-sourcetype = suricata
+## Splunk Universal Forwarder
 
-[monitor:///var/log/suricata/fast.log]
-disabled = false
-sourcetype = suricata_fast
+Installed on homelab server, forwarding to Splunk Enterprise on port 9997.
 
-[monitor:///var/log/auth.log]
-disabled = false
-sourcetype = linux_secure
-
-[monitor:///var/log/syslog]
-disabled = false
-sourcetype = syslog
-
-[monitor:///var/log/nginx]
-disabled = false
-sourcetype = nginx_access
-
-[monitor:///var/log/apt]
-disabled = false
-sourcetype = linux_apt
-
-[monitor:///var/log/dpkg.log]
-disabled = false
-sourcetype = linux_dpkg
-
-[monitor:///var/log/clamav]
-disabled = false
-sourcetype = clamav
-
-[monitor:///var/log/openvpn]
-disabled = false
-sourcetype = openvpn
-
-[monitor:///var/log/boot.log]
-disabled = false
-sourcetype = linux_boot
+Enable receiving on Splunk Enterprise:
+```bash
+sudo /opt/splunk/bin/splunk enable listen 9997 -auth admin:password
 ```
 
 ## Dashboards
 
 ### Zeek Network Monitor
-
-Custom dashboard with the following panels:
 
 | Panel | SPL Query |
 |-------|-----------|
@@ -94,10 +57,28 @@ Custom dashboard with the following panels:
 | Top 10 DNS Queries | `sourcetype=zeek_json source=*dns* \| top limit=10 query` |
 | Connection Protocols Over Time | `sourcetype=zeek_json source=*conn* \| timechart count by proto` |
 | Weird Activity | `sourcetype=zeek_json source=*weird* \| table ts name peer msg` |
-| 404 Errors | `sourcetype=nginx_access status=404 \| table _time method uri status` |
-| 200 vs 404 | `sourcetype=nginx_access \| timechart count by status` |
 
-Dashboard XML exported to [dashboards/zeek_network_monitor.xml](dashboards/zeek_network_monitor.xml).
+### Homelab Server Dashboard
+
+| Panel | SPL Query |
+|-------|-----------|
+| Server Events | `host=homelab \| table _time sourcetype _raw` |
+| Auth Events | `host=homelab sourcetype=linux_secure \| table _time _raw` |
+| Pi-hole DNS | `host=homelab sourcetype=pihole \| table _time _raw` |
+
+## Alerts
+
+### Port Scan Detection
+
+Scheduled alert running every 15 minutes:
+
+```spl
+index=* sourcetype=zeek_json
+| stats dc(id.resp_p) as unique_ports by id.orig_h
+| where unique_ports > 100
+```
+
+Triggers when any host contacts more than 100 unique ports in a 30 minute window.
 
 ## Useful SPL Queries
 
@@ -106,14 +87,26 @@ Dashboard XML exported to [dashboards/zeek_network_monitor.xml](dashboards/zeek_
 index=* sourcetype=zeek_json earliest=-15m
 
 # DNS queries to a specific domain
-sourcetype=zeek_json source=*dns* query="*google*" | table ts id.orig_h query answers
+sourcetype=zeek_json source=*dns* query="*google*"
+| table ts id.orig_h query answers
 
 # Failed SSH logins
-sourcetype=linux_secure "Failed password" | stats count by src_ip | sort -count
+sourcetype=linux_secure "Failed password"
+| stats count by src_ip
+| sort -count
 
 # Suricata alerts by severity
-sourcetype=suricata | stats count by alert.severity alert.signature | sort -count
+sourcetype=suricata
+| stats count by alert.severity alert.signature
+| sort -count
 
 # Top talkers by bytes
-sourcetype=zeek_json source=*conn* | stats sum(resp_ip_bytes) as total_bytes by id.orig_h | sort -total_bytes
+sourcetype=zeek_json source=*conn*
+| stats sum(resp_ip_bytes) as total_bytes by id.orig_h
+| sort -total_bytes
+
+# Pi-hole blocked queries
+sourcetype=pihole "gravity blocked"
+| rex "gravity blocked (?<domain>\S+)"
+| top limit=20 domain
 ```
