@@ -1,10 +1,10 @@
-# 🖥️ nerd-space — Self-Hosted Homelab Server Build
+# nerd-space — Self-Hosted Homelab Server Build
 ### Intel NUC8 | Ubuntu Server 26.04 LTS | Docker | Wazuh SIEM
 *Built by Brandon "Turtle" Fagan — barkingturtlelabs*
 
 ---
 
-## 📋 Project Overview
+##  Project Overview
 
 **nerd-space** is a fully self-hosted, production-grade homelab server built on an Intel NUC8 running Ubuntu Server 26.04 LTS. The goal of this project was to migrate all existing homelab services from a decommissioned HP laptop server onto a consolidated, purpose-built headless server node — and to deploy a full SIEM (Security Information and Event Management) platform with real endpoint monitoring.
 
@@ -12,7 +12,7 @@ This project demonstrates hands-on skills in Linux server administration, Docker
 
 ---
 
-## 🛠️ Hardware Specifications
+##  Hardware Specifications
 
 | Component | Spec |
 |---|---|
@@ -25,13 +25,13 @@ This project demonstrates hands-on skills in Linux server administration, Docker
 
 ---
 
-## 🌐 Network Configuration
+##  Network Configuration
 
 | Setting | Value |
 |---|---|
-| **Static IP** | `192.168.254.10` |
-| **Subnet** | `192.168.254.0/24` |
-| **Gateway** | `192.168.254.254` |
+| **Static IP** | `192.xxx.xxx.10` |
+| **Subnet** | `192.xxx.xxx.0/24` |
+| **Gateway** | `192.xxx.xxx.254` |
 | **DNS (temporary)** | `8.8.8.8`, `8.8.4.4` |
 | **Hostname** | `nerd-space` |
 | **Remote Access** | WireGuard VPN (`barkingturtlelabs.duckdns.org`) |
@@ -40,7 +40,7 @@ Static IP configured via Netplan (`/etc/netplan/00-installer-config.yaml`) post-
 
 ---
 
-## 💾 Storage Layout
+##  Storage Layout
 
 ```
 256GB SSD  (/dev/sda)  →  OS, Docker volumes, configs, active data
@@ -64,7 +64,7 @@ Static IP configured via Netplan (`/etc/netplan/00-installer-config.yaml`) post-
 
 ---
 
-## 🐋 Docker Services
+##  Docker Services
 
 ### Currently Deployed
 
@@ -84,7 +84,7 @@ Static IP configured via Netplan (`/etc/netplan/00-installer-config.yaml`) post-
 
 ---
 
-## 🔒 Wazuh SIEM Deployment
+##  Wazuh SIEM Deployment
 
 ### Stack
 - **Version:** Wazuh 4.14.0 (single-node Docker deployment)
@@ -128,7 +128,7 @@ docker compose logs -f
 
 ---
 
-## 🖥️ Monitored Endpoints
+##  Monitored Endpoints
 
 ### Active Agents
 
@@ -158,23 +158,23 @@ sudo systemctl start wazuh-agent
 
 ---
 
-## 📊 Security Assessment Results
+##  Security Assessment Results
 
 ### CIS Ubuntu Linux 24.04 LTS Benchmark v1.0.0
 *Run against: Turtles_Dell_Laptop | Date: 2026-05-23*
 
 | Result | Count |
 |---|---|
-| ✅ Passed | 108 |
-| ❌ Failed | 118 |
-| ⚪ Not Applicable | 53 |
+|  Passed | 108 |
+|  Failed | 118 |
+|  Not Applicable | 53 |
 | **Score** | **47%** |
 
 > A 47% baseline score is expected for a fresh Ubuntu install. CIS benchmarks are intentionally strict. Remediation of failed checks is an ongoing hardening project — documented separately.
 
 ---
 
-## 🔥 Firewall Rules (UFW)
+##  Firewall Rules (UFW)
 
 ```bash
 sudo ufw default deny incoming
@@ -191,22 +191,22 @@ sudo ufw allow 55000/tcp     # Wazuh API
 
 ---
 
-## 🔐 Security Hardening Applied
+##  Security Hardening Applied
 
-- ✅ SSH key-based authentication only
-- ✅ Root login disabled (`PermitRootLogin no`)
-- ✅ Password authentication disabled (`PasswordAuthentication no`)
-- ✅ UFW firewall enabled with default deny incoming
-- ✅ Fail2ban configured (SSH jail, max 3 retries)
-- ✅ Non-default admin account created in Wazuh
-- ✅ Static IP via Netplan (no DHCP dependency)
-- ✅ ext4 filesystem with tune2fs resilience settings
-- 🔲 Timeshift backups (planned)
-- 🔲 UPS for clean shutdown on power loss (recommended — previous NUC suffered ext4 corruption from power blip)
+-  SSH key-based authentication only
+-  Root login disabled (`PermitRootLogin no`)
+-  Password authentication disabled (`PasswordAuthentication no`)
+-  UFW firewall enabled with default deny incoming
+-  Fail2ban configured (SSH jail, max 3 retries)
+-  Non-default admin account created in Wazuh
+-  Static IP via Netplan (no DHCP dependency)
+-  ext4 filesystem with tune2fs resilience settings
+-  Timeshift backups (planned)
+-  UPS for clean shutdown on power loss (recommended — previous NUC suffered ext4 corruption from power blip)
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 Homelab-Projects/
@@ -226,9 +226,9 @@ Homelab-Projects/
 
 ---
 
-## 🗺️ Roadmap
+##  Roadmap
 
-### Phase 1 — Core Server (✅ Complete)
+### Phase 1 — Core Server (Complete)
 - [x] Ubuntu Server 26.04 LTS fresh install
 - [x] Static IP via Netplan
 - [x] Docker + Portainer
@@ -262,13 +262,13 @@ Homelab-Projects/
 
 ---
 
-## 🧰 Tools & Technologies Used
+##  Tools & Technologies Used
 
 `Ubuntu Server 26.04 LTS` `Docker` `Docker Compose` `Wazuh 4.14` `OpenSearch` `UFW` `Fail2ban` `Netplan` `WireGuard` `ext4` `tune2fs` `rsync` `SSH` `Git`
 
 ---
 
-## 📚 References
+##  References
 
 - [Wazuh Docker Deployment Docs](https://documentation.wazuh.com/current/deployment-options/docker/wazuh-container.html)
 - [CIS Ubuntu Linux Benchmark](https://www.cisecurity.org/benchmark/ubuntu_linux)
@@ -277,12 +277,12 @@ Homelab-Projects/
 
 ---
 
-## 👤 Author
+##  Author
 
 **Brandon "Turtle" Fagan**  
 ISC2 CC | CompTIA Security+ | CySA+ (in progress)  
-🐢 [github.com/BLFaganProjects/Homelab-Projects](https://github.com/BLFaganProjects/Homelab-Projects)
+ [github.com/BLFaganProjects/Homelab-Projects](https://github.com/BLFaganProjects/Homelab-Projects)
 
 ---
 
-*Built with persistence, patience, and a lot of troubleshooting. nerd-space lives! 🐢*
+*Built with persistence, patience, and a lot of troubleshooting. nerd-space lives! *
